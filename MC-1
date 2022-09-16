@@ -1,15 +1,33 @@
-// factorial iter
-function factorial(n) { 
-    return iter(1, 1, n); 
+// // factorial iter
+// function factorial(n) { 
+//     return iter(1, 1, n); 
+// }
+
+// function iter (product, counter, n) { 
+//     return counter > n 
+//             ? product 
+//             : iter(counter * product, counter + 1, n);
+// }
+
+// factorial(4);
+
+// f with constant deferred operations
+function f(n) {
+    return n <= 1 
+            ? 1 
+            : n <= 5 
+            ? 2 * f(n - 1) 
+            : f(n - 2); 
 }
 
-function iter (product, counter, n) { 
-    return counter > n 
-            ? product 
-            : iter(counter * product, counter + 1, n);
-}
+f(6);       // zoom to step 56
+f(7);       // zoom to step 68
+f(14);      // zoom to step 104
+f(15);      // zoom to step 116
 
-factorial(4);
+// for n greater than 5, even number n will have 3 deferred operations
+// odd number n will have 4 deferred operations
+
 
 // // Parentheses around lambda expressions
 // function cube(x) {
