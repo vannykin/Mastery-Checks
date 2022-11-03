@@ -1,1 +1,74 @@
+function integers_from(n) {
+    return pair(n, () => integers_from(n + 1));
+}
 
+const integers = integers_from(1);
+
+tail(integers)();
+
+head(tail(integers)());
+
+head(tail(tail(integers)())());
+
+head(tail(tail(tail(integers)())())());
+
+function stream_tail(stream) {
+    return tail(stream)();
+}
+
+stream_tail(integers);
+// stream_tail evaluates the tail of the stream once
+
+function fibgen(a, b) {
+    return pair(a, () => fibgen(b, a + b));
+}
+
+const fibseq = fibgen(0, 1); // starting from 0
+eval_stream(fibseq, 10);
+// returns the first 10 fibonacci numbers
+
+const fib_from_5 = fibgen(5, 8); // starting from 5
+eval_stream(fib_from_5, 10);
+
+function add_streams(s1, s2) {
+    if (is_null(s1)) {
+        return s2;
+    } else if (is_null(s2)) {
+        return s1;
+    } else {
+        return pair(head(s1) + head(s2), () => add_streams(stream_tail(s1),
+                                                            stream_tail(s2)));
+    }
+}
+
+const fibs = pair(0, () => pair(1, () => add_streams(stream_tail(fibs), fibs)));
+
+eval_stream(fibs, 10);
+
+function memo_fun(fun) {
+    let already_run = false;
+    let result = undefined;
+    function mfun() {
+    if (!already_run) {
+        result = fun();
+        already_run = true;
+        return result;
+    } else {
+        return result;
+    }
+    }
+    return mfun;
+}
+
+function ms(m, s) {
+    display(m);
+    return s;
+}
+
+// const onesA = pair(1, () => ms("A", onesA));
+
+// stream_ref(onesA, 3);
+
+const onesB = pair(1, memo_fun(() => ms("B", onesB)));
+
+stream_ref(onesB, 3);
